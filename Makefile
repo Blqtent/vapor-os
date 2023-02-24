@@ -1,8 +1,10 @@
 CC = cat
 
-SRC = $(filter-out src/boot.urcl, $(wildcard src/*.urcl))
+SRC = $(filter-out src/header.urcl, $(filter-out src/boot.urcl, $(wildcard src/*.urcl)))
 
 BOOT = src/boot.urcl
+
+HEADER = src/header.urcl
 
 OUT = os.urcl
 
@@ -12,7 +14,10 @@ build: ${SRC} ${BOOT} ${OUT}
 
 
 ${OUT}:
-	${CC} ${BOOT} ${SRC} > ${OUT}
+	${CC} ${HEADER} ${BOOT} ${SRC} > ${OUT}
 
 clean:
 	rm ${OUT}
+
+
+rebuild: clean build

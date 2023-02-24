@@ -1,11 +1,52 @@
+// size_t = @BITS
+
 //
 //  struct block {
-//      int type; // 1 = superblock, 2 = file, 3 = directory
+//      size_t type; // 1 = superblock, 2 = file, 3 = directory
 //      char * name; // 0 if is superblock, else cannot have no name
-//      
-//
+//      block * data[N]; // N = partition size - 3
+//      block * nextblock;
+//  }
 //
 
+// in superblock, data will contain files and directories as superblock works as "/" directory
 
-.init_fs
-    RET // WIP
+
+.fs_init
+    OUT %PAGE 0
+    OUT %ADDR 0
+    OUT %BUS SUPERBLOCK
+
+    OUT %ADDR 1
+    OUT %BUS 0 // no name for superblock
+
+    OUT %ADDR 255 // BLOCK_SIZE - 1
+    OUT %BUS 0 // next block is not defined, thus it is the superblock itself
+    RET
+
+.fs_allocate_block
+    PSH $2
+    PSH $3
+    PSH $4
+    MOV $3 1
+    MOV $1 256
+    MOV $2 0
+    .fs_allocate_block_loop
+        OUT %PAGE $2
+        OUT %ADDR $1
+        IN $4 %BUS
+        BRZ .fs_allocate_block_found
+        INC $3 $3
+        ADD $1 $1 256
+        BRZ .fs_allocate_block_rollover $1
+        JMP .fs_allocate_block_loop
+    .fs_allocate_block_rollover
+        INC $2 $2
+        JMP .fs_allocate_block_loop
+    .fs_allocate_block_found
+        MOV $1 $3
+        POP $4
+        POP $3
+        POP $2
+        RET
+        

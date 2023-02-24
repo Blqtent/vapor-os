@@ -1,0 +1,7 @@
+BITS 32
+MINHEAP 0xffff
+MINSTACK 0xfff
+@define SUPERBLOCK 1
+@define FILE 2
+@define DIR 3
+@define BLOCK_SIZE 256

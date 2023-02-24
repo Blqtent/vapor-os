@@ -1,0 +1,85 @@
+.init
+    str 0x2000 0xffffffff
+    ret
+
+.malloc
+    psh r1
+    psh r2
+    psh r3
+    psh r4
+    psh r5
+    llod r1 sp 6 // size
+    inc r1 r1
+    mov r2 0x2000 // addr
+    mov r3 0 // ptr
+    .malloc_while1
+        lod r3 r2           // ptr = mem[addr];
+                            // if(
+        and r4 r3 0x80000000    // ptr & 0x8000
+        setne r4 r4 0       // != 0
+        and r5 r3 0x7fffffff    // ptr & 0x7fff
+        sub r5 r5 r2        // - addr
+        setge r5 r5 r1      // >= size
+        and r4 r4 r5        // stmt1 && stmt2
+        brz .malloc_else1 r4
+                            // ) {
+        jmp .malloc_while1_end // break;
+        .malloc_else1       // } else {
+        and r2 r3 0x7fffffff    // addr = ptr & 0x7fff
+        jmp .malloc_while1  // }
+    .malloc_while1_end
+        and r4 r3 0x7fffffff // let nsize = ptr & 0x7fff
+        sub r4 r4 r2 // nsize -= addr
+
+        setg r4 r4 r1
+        brz .malloc_else2 r4
+        add r4 r2 r1
+        and r4 r4 0x7fffffff
+        lstr r2 r1 r3
+        str r2 r4
+        jmp .malloc_if2_end
+        .malloc_else2
+        lod r4 r2
+        and r4 r4 0x7fffffff
+        str r2 r4
+        .malloc_if2_end
+        inc r2 r2
+        lstr sp 6 r2
+        pop r5
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        ret
+
+.free // function free(
+    psh r1
+    psh r2
+    psh r3
+    psh r4
+    psh r5
+    llod r1 sp 6 // addr) {
+    dec r1 r1 // addr -= 1;
+    .free_loop
+        lod r2 r1 // ptr = mem[addr]
+        and r2 r2 0x7fffffff // & 0x7fff
+        lod r3 r2 // const next_block = mem[ptr]
+        lod r4 r1 // mem[addr]
+        or r4 r4 0x80000000 // |= 0x8000
+        str r1 r4 // => mem[addr]
+
+        and r4 r3 0x80000000 // next_block & 0x8000
+        setne r4 r4 0 // != 0
+        setne r5 r3 0
+        and r4 r4 r5
+        brz .free_end r4 // (
+        str r1 r3 // mem[addr] = next_block
+        str r2 0 // mem[ptr] = 0
+        jmp .free_loop // free()
+        .free_end
+        pop r5
+        pop r4
+        pop r3
+        pop r2
+        pop r1
+        ret // }
