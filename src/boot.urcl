@@ -1,0 +1,15 @@
+BITS 32
+MINHEAP 0xff
+MINSTACK 0xff
+
+CAL .boot
+// not going to halt the computer
+
+.boot
+    PUSH .str1boot
+    CAL .print
+    JMP ~+0
+
+
+.str1boot
+    DW [ "Operating system booted.\n" 0 ]

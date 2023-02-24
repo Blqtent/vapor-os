@@ -1,0 +1,11 @@
+//
+//  struct block {
+//      int type; // 1 = superblock, 2 = file, 3 = directory
+//      char * name; // 0 if is superblock, else cannot have no name
+//      
+//
+//
+
+
+.init_fs
+    RET // WIP

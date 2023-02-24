@@ -1,0 +1,12 @@
+.print
+    PSH R2
+    LLOD R1 SP 2
+    .print_loop
+        LOD R2 R1
+        BRZ .print_end R2
+        OUT %TEXT R2
+        INC R1 R1
+        JMP .print_loop
+    .print_end
+    POP R2
+    RET
