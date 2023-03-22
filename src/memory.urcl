@@ -3,12 +3,11 @@
     ret
 
 .malloc
-    psh r1
     psh r2
     psh r3
     psh r4
     psh r5
-    llod r1 sp 6 // size
+    llod r1 sp 5 // size
     inc r1 r1
     mov r2 0x2000 // addr
     mov r3 0 // ptr
@@ -44,12 +43,11 @@
         str r2 r4
         .malloc_if2_end
         inc r2 r2
-        lstr sp 6 r2
+        mov r1 r2
         pop r5
         pop r4
         pop r3
         pop r2
-        pop r1
         ret
 
 .free // function free(
