@@ -1,0 +1,35 @@
+.print
+    PSH R2
+    LLOD R1 SP 2
+    .print_loop
+        LOD R2 R1
+        BRZ .print_end R2
+        OUT %TEXT R2
+        INC R1 R1
+        JMP .print_loop
+    .print_end
+    POP R2
+    RET
+
+.gets
+    PSH R2
+    LLOD R2 SP 2 // pointer to the buffer (buffer overflow warning)
+    .gets_loop
+        IN R1 %TEXT
+        OUT %TEXT R1
+        BRZ .gets_end R1
+        BRE .gets_end R1 '\n'
+        BRE .gets_bs R1 0x08
+        STR R2 R1
+        INC R2 R2
+        JMP .gets_loop
+    .gets_end
+        STR R2 0
+        POP R2
+        RET
+    .gets_bs
+        DEC R2 R2
+        STR R2 0
+        OUT %TEXT ' '
+        OUT %TEXT 0x8
+        JMP .gets_loop

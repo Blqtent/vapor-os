@@ -1,4 +1,4 @@
-.init
+.malloc_init
     str 0x2000 0xffffffff
     ret
 

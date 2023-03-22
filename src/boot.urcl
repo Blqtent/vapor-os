@@ -4,7 +4,19 @@ CAL .boot
 .boot
     PSH .str1boot
     CAL .print
-    CAL .fs_init
+    POP 0
+    CAL .malloc_init
+    
+    PSH 15
+    CAL .malloc
+    POP 0
+
+    PSH R1
+    CAL .gets
+
+    // R1 (buffer) is still on stack as the call didnt clear it
+
+    CAL .print
     JMP ~+0
 
 

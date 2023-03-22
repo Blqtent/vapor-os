@@ -35,7 +35,7 @@
         OUT %PAGE $2
         OUT %ADDR $1
         IN $4 %BUS
-        BRZ .fs_allocate_block_found
+        BRZ .fs_allocate_block_found $4
         INC $3 $3
         ADD $1 $1 256
         BRZ .fs_allocate_block_rollover $1
@@ -49,4 +49,26 @@
         POP $3
         POP $2
         RET
-        
+
+
+.fs_put_string
+    PSH $2
+    PSH $3
+    PSH $4
+    PSH $5
+
+    LLOD $1 SP 5 // 
+    LLOD $2 SP 6
+
+    AND $3 $1 0xffffff // address
+    MLT $3 $3 256
+    AND $4 $1 0xff000000 // pages
+    BSR $4 $4 24
+    
+    POP $5
+    POP $4
+    POP $3
+    POP $2
+    POP $1
+
+    RET
