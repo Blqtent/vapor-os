@@ -4,12 +4,12 @@ CAL .boot
 .boot
     PSH .str1boot
     CAL .print
-    POP 0
+    POP r0
     CAL .malloc_init
     
     PSH 15
     CAL .malloc
-    POP 0
+    POP r0
 
     PSH R1
     CAL .gets

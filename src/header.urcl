@@ -5,3 +5,9 @@ MINSTACK 0xfff
 @define FILE 2
 @define DIR 3
 @define BLOCK_SIZE 256
+@define programstart 32768 // replace with amount of reserved memory
+@define programend r3
+@define bf_pc r4
+@define currchar r5
+@define maxtapelength 256
+@define threadlength 256

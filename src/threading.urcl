@@ -1,0 +1,32 @@
+//Stub
+
+.threadptr
+    dw 0
+.threads
+    dw [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] //pointers to threads
+.threading_init
+    ret //WIP
+
+.create_thread
+    .alloc
+    psh 520 // 256 words code + 128 stack + 128 heap + 8 registers
+    cal .malloc
+    .start
+    psh r2
+    psh r3
+    lod r2 threadptr
+    lstr .threads r2 r1
+    inc r2 r2
+    imm r3 .threadptr
+    str r3 r2
+    .done
+    pop r2
+    pop r3
+    ret
+
+.write_thread 
+    psh r2
+    psh r3
+    psh r4
+    llod r1 sp 4 // pointer to buffer (zero terminating)
+    

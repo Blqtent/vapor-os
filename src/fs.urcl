@@ -22,6 +22,7 @@
 
     OUT %ADDR 255 // BLOCK_SIZE - 1
     OUT %BUS 0 // next block is not defined, thus it is the superblock itself
+    // the data is the pointers to the directories in the superblock
     RET
 
 .fs_allocate_block
